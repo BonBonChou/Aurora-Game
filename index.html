@@ -230,13 +230,13 @@
   <div class="hidden" id="knowledge-screen">
     <h3 id="knowledge-title">知識補充</h3>
     <p id="knowledge-text"></p>
-    <div id="info-link" class="hidden" style="margin-top: 1em;"></div>
     <button onclick="nextQuestion()">下一頁</button>
   </div>
   <!-- 結尾頁 -->
   <div id="final-message-screen" class="hidden">
     <h6>除了火星，我們還探索銀河中是否有與我們類似的星球。然而，浩瀚星辰中，我們發現自己仍然形單影隻。<br>但是透過璀璨奪目的極光，我們向宇宙展現了我們的存在。<br>你已完成所有任務，成功解碼極光背後的秘密。<br>宇宙仍有許多未知等待被發現——<br>任務結束，但探索永無止境。</h6>
     <h2 id="final-highlight">未來的觀測者，將以你的紀錄為起點，<br>繼續追尋宇宙的光之軌跡。</h2>
+    <div id="info-link" class="hidden" style="margin-top: 1em;"></div>
     <button onclick="showResult()">下一頁</button>
   </div>
   <!-- 結算頁 -->
@@ -247,10 +247,10 @@
     <div class="all-endings">
       <h3>所有評語對照表：</h3>
       <ul>
-        <li>0–1 分：極光的世界於你而言仍在雲霧之中。繼續挑戰，真相就在前方。</li>
-        <li>2–3 分：好開始是成功的一半，繼續追尋宇宙的奧祕吧！</li>
-        <li>4–5 分：你能解析極光的運作與原理，離全面解碼只差臨門一腳！</li>
-        <li>6 分：你成功解開極光的所有謎題，是知識與觀測的極光解碼者！</li>
+        <li>0–1 分：極光的世界於你而言仍在雲霧之中，有待探索。</li>
+        <li>2–3 分：你已踏出關鍵一步，理解正逐漸清晰。</li>
+        <li>4–5 分：你能精準解析極光，幾乎掌握全貌，是位優秀極光分析員！</li>
+        <li>6 分：你成功解開極光所有謎題，是知識與觀測能力兼具的極光解碼者！</li>
       </ul>
     </div>
     <button onclick="location.reload()">重新開始</button>
@@ -296,10 +296,6 @@
         knowledge: `地球內部有一個流動的熔融金屬核心，這讓地球產生一個像「看不見的磁鐵」一樣的磁場。這個磁場會擋住大部分從太陽而來的高能粒子，保護地表的生命不被傷害。
         
         不過，有些帶電粒子會沿著地球磁場的磁力線，往磁極（南北極）移動。這些粒子進入極地高空時，會和大氣分子碰撞，產生極光。沒有磁場，就不會有極光，也不會有我們所熟悉的安全環境！`,
-        link: [
-          { text: "展示場 3 樓：重力透鏡", url: "https://sites.google.com/view/tamwebtp/%E4%B8%89%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%98%9F%E7%B3%BB/%E9%87%8D%E5%8A%9B%E9%80%8F%E9%8F%A1"},
-          { text: "天文新知：科學家利用重力透鏡效應發現 300 億倍太陽質量的超大質量黑洞", url: "https://tam.gov.taipei/News_Content.aspx?n=EF86D8AF23B9A85B&sms=F32C4FF0AC5C2801&s=0B492D9B1ACB3DD0"}
-          ]
       },
       {
         title: "第 3 關：合適的觀賞地點",
@@ -319,10 +315,6 @@
         · 南半球的南極周邊也能見到南極光，但交通不便
         
         在太陽活動非常劇烈時，極光可能延伸到較南的地區，但那是少見的例外。想看極光，記得往高緯度、遠離城市燈光的地方去，才是最佳選擇！`,
-        link: [
-          { text: "展示場 2 樓：赫羅圖與恆星的一生", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E8%B5%AB%E7%BE%85%E5%9C%96%E8%88%87%E6%81%86%E6%98%9F%E7%9A%84%E4%B8%80%E7%94%9F"},
-          { text: "展示場 2 樓：緻密星體", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E7%B7%BB%E5%AF%86%E6%98%9F%E9%AB%94"}
-        ]
       },
       {
         title: "第 4 關：太陽活動週期",
@@ -338,10 +330,6 @@
         knowledge: `太陽表面有時會出現一些黑色的斑點，這些稱為「太陽黑子」，它們代表太陽活動特別活躍的區域。經過長期觀察，科學家發現太陽的黑子數量大約每 11 年會有一個高峰，這就稱為太陽活動週期。
         
         這也是為什麼天文學家會預測「極光季節」──因為它和太陽黑子的活動息息相關。掌握太陽的脾氣，就能更好地預測極光的表現！`,
-        link: [
-          { text: "展示場 2 樓：赫羅圖與恆星的一生", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E8%B5%AB%E7%BE%85%E5%9C%96%E8%88%87%E6%81%86%E6%98%9F%E7%9A%84%E4%B8%80%E7%94%9F"},
-          { text: "展示場 2 樓：緻密星體", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E7%B7%BB%E5%AF%86%E6%98%9F%E9%AB%94"}
-        ]
       },
       {
         title: "第 5 關：爆發？！",
@@ -360,13 +348,7 @@
         
         NASA 的衛星觀測發現，極光爆發的背後常伴隨「磁場重連」的現象──也就是地球磁場的磁力線在外太空中斷裂、重新連接，釋放出大量能量。
         
-        這不只是一場光秀，它也會影響地球上的通訊衛星、電力系統與導航設備，是一種美麗同時具有威力的宇宙現象！`,
-        link: [
-          { text: "展示場 2 樓：赫羅圖與恆星的一生", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E8%B5%AB%E7%BE%85%E5%9C%96%E8%88%87%E6%81%86%E6%98%9F%E7%9A%84%E4%B8%80%E7%94%9F"},
-          { text: "展示場 2 樓：緻密星體", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E7%B7%BB%E5%AF%86%E6%98%9F%E9%AB%94"},
-          { text: "展示場 2 樓：黑洞", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E9%BB%91%E6%B4%9E"},
-          { text: "臺北星空 120 期 認識黑洞", url: "https://tam.gov.taipei/News_Content.aspx?n=A2F7381512F89DFB&sms=8DB4DFD3C6946BB3&s=53822E5B89E557C6"}
-        ]
+        這不只是一場光秀，它也會影響地球上的通訊衛星、電力系統與導航設備，是一種美麗同時具有威力的宇宙現象！`,        
       },
       {
         title: "第 6 關：宇宙極光",
@@ -388,11 +370,6 @@
         木星是一個巨大的氣態行星，擁有太陽系中最強的行星磁場，因此會產生壯觀的極光，尤其在極區非常明亮，甚至比地球的極光還強。
         
         所以，極光其實是宇宙中常見的現象，只要條件足夠，不只是地球，其他行星也能有自己的光之舞！`,
-        link: [
-          { text: "展示場 3 樓：什麼是重力波", url: "https://sites.google.com/view/tamwebtp/%E4%B8%89%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%98%9F%E7%A9%BA%E8%B5%B0%E5%BB%8A/%E4%BB%80%E9%BA%BC%E6%98%AF%E9%87%8D%E5%8A%9B%E6%B3%A2"},
-          { text: "展示場 3 樓：電波望遠鏡", url: "https://sites.google.com/view/tamwebtp/%E4%B8%89%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E5%A4%A9%E6%96%87%E8%A7%80%E6%B8%AC/%E9%9B%BB%E6%B3%A2%E6%9C%9B%E9%81%A0%E9%8F%A1"},
-          { text: "天文新知：事件視界望遠鏡", url: "https://tam.gov.taipei/News_Content.aspx?n=A2F7381512F89DFB&sms=8DB4DFD3C6946BB3&s=CF25F5EC01BF978E"}
-        ]
       }
     ];
 
@@ -476,20 +453,39 @@
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-    		document.getElementById("final-message-screen").classList.remove("hidden");
+    		showFM();
       }      
+    }
+    
+    function showFM() {
+      document.getElementById("final-message-screen").classList.remove("hidden");
+      const linkArea = document.getElementById("info-link");
+      const link = [
+        { text: "展示場 1 樓：太陽風", url: "https://sites.google.com/view/tamwebtp/%E4%B8%80%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E5%A4%AA%E7%A9%BA%E6%8E%A2%E9%9A%AA/%E5%A4%AA%E9%99%BD%E9%A2%A8"},
+        { text: "展示場 1 樓：極光", url: "https://sites.google.com/view/tamwebtp/%E4%B8%80%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E5%A4%AA%E7%A9%BA%E6%8E%A2%E9%9A%AA/%E6%A5%B5%E5%85%89"},
+        { text: "展示場 2 樓：太陽表面活動", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E5%A4%AA%E9%99%BD%E8%A1%A8%E9%9D%A2%E6%B4%BB%E5%8B%95"}
+      ];
+      if (link) {
+        linkArea.innerHTML = "<p>相關內容</p>";
+
+        if (Array.isArray(link)) {
+          link.forEach((l) => {
+            linkArea.innerHTML += `<a href="${l.url}" target="_blank" style="display:block; color:#00ccff;">${l.text}</a>`
+          });
+        }
+        linkArea.classList.remove("hidden");
+      }
     }
 
     function showResult() {
     document.getElementById("final-message-screen").classList.add("hidden");
       document.getElementById("result-screen").classList.remove("hidden");
-      document.getElementById("final-score").textContent = `你的總分：${score}/10`;
+      document.getElementById("final-score").textContent = `你的總分：${score}/6`;
       let feedback = "";
-      if (score === 10) feedback = "宇宙奧秘大師！你已掌握宇宙的關鍵祕密！";
-      else if (score >= 8) feedback = "太空偵查高手！再一點點就能破解全部謎團！";
-      else if (score >= 6) feedback = "太空新探員，你的觀察力正在穩定成長中！";
-      else if (score >= 3) feedback = "好開始是成功的一半，繼續追尋宇宙的奧祕吧！";
-      else feedback = "每次嘗試都更靠近真相，歡迎再次挑戰！";
+      if (score === 6) feedback = "你成功解開極光所有謎題，是知識與觀測能力兼具的極光解碼者！";
+      else if (score >= 4) feedback = "你能精準解析極光，幾乎掌握全貌，是位優秀極光分析員！";
+      else if (score >= 2) feedback = "你已踏出關鍵一步，理解正逐漸清晰。";
+      else feedback = "極光的世界於你而言仍在雲霧之中，有待探索。";
       document.getElementById("final-feedback").textContent = feedback;
     }
   </script>
