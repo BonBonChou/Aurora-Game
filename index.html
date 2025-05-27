@@ -1,782 +1,493 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>-->
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> -->
-  <!--引入 jsPDF-->
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>-->
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>翼裝飛行訓練日誌</title>
-    <style>
-      body {
-        font-family: "Noto Sans TC", sans-serif;
-        background: linear-gradient(to right, #e8e7cf, #edebaf, #edebab);
-        color: #000;
-        text-align: center;
-        padding: 2em;
-      }
-      .container {
-        max-width: 700px;
-        margin: auto;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 15px;
-        padding: 2em;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      }
-      h1 {
-        font-size: 35px; /* 字體大小 */
-        color: #ffffff; /* 白色字體比較適合做光暈效果 */
-        font-weight: bold; /* 粗體 */
-        text-align: center; /* 置中 */
-        margin-bottom: 30px; /* 下方留空 */
-        text-shadow:
-          0 0 5px #c2a200,
-          0 0 10px #c2a200,
-          0 0 15px #c2a200,
-          0 0 20px #c2a200;
-        /*background-color: #000000;   /* 建議加深背景讓光暈更明顯 */
-        padding: 0px;
-        border-radius: 10px;
-      }
-      h4 {
-        font-size: 1.4em;
-        line-height: 1.6;
-        margin-bottom: 1em;
-        color: #e3ce0e;
-      }
-      h5 {
-        font-size: 1.2em;
-        line-height: 1.2;
-        margin-top: 0em;
-        margin-bottom: 1em;
-        color: #b3a102;
-      }
-      h6 {
-        font-size: 1.3em;
-        margin: 1em 0;
-        text-align: justify;
-        color: #e3ce0e;
-        text-align: center;
-      }
-      .intro {
-        text-align: left;
-        margin-bottom: 0em;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>極光任務：解碼天際之光</title>
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: linear-gradient(to right, #168b91, #248d91, #339296);
+      color: #fff;
+      text-align: center;
+      padding: 2em;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: rgba(0,0,0,0.7);
+      border-radius: 15px;
+      padding: 2em;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+    .hidden { display: none; }
+    button {
+      margin: 1em;
+      padding: 0.75em 2em;
+      font-size: 1.2em;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: #34aec9;
+      color: white;
+      transition: background 0.3s ease;
+    }
+    button:hover { background: #5dd5f0; }
+    .choice-btn {
+      display: block;
+      margin: 1em auto;
+      width: 90%;
+      cursor: pointer;
+    } 
+    .content { max-width: 600px; margin: auto; }
+    h1 {
+      font-size: 30px;             /* 字體大小 */
+      color: #ffffff;              /* 白色字體比較適合做光暈效果 */
+      font-weight: bold;           /* 粗體 */
+      text-align: center;          /* 置中 */
+      margin-bottom: 30px;         /* 下方留空 */
+      text-shadow: 
+        0 0 5px #00ffff,           /* 淺紫光暈 */
+        0 0 10px #00ffff,
+        0 0 15px #00ffff,
+        0 0 20px #00ffff;
+      /*background-color: #000000;   /* 建議加深背景讓光暈更明顯 */
+      padding: 0px;
+      border-radius: 10px;
+    }
+    h4 {
+      font-size: 1.4em;
+      line-height: 1.6;
 
-        background: rgba(0, 0, 0, 0.05);
-        padding: 0.5em;
-        border-radius: 10px;
-      }
-      .hidden {
-        display: none;
-      }
-      .center {
-        text-align: center;
-      }
-      button {
-        margin: 1em;
-        padding: 0.75em 2em;
-        font-size: 1.2em;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        background: #fcd303;
-        color: black;
-        transition: background 0.3s ease;
-      }
-      button:hover { background: #e6cc0a; }
-      .choice-btn {
-        display: block;
-        margin: 1em auto;
-        width: 90%;
-        cursor: pointer;
-      } 
-      #question-title {
-        font-size: 2em; /* 你可以依需求調整數值 */
-        font-weight: bold; /* 也可以設為 normal, lighter 等 */
-        margin-bottom: 0.5em;
-        color: #e3ce0e;
-      }
-      #question-text {
-        font-size: 1.5em;
-        line-height: 1.6;
-        margin-bottom: 1em;
-      }
-      #knowledge-text {
-        font-size: 1.3em;
-        line-height: 1.6;
-        margin-bottom: 1em;
-        text-align: justify;
-      }
-      .choice-button {
-        display: block;
-        margin: 10px auto;
-        width: 80%;
-      }
-      .content {max-width: 600px; margin: auto; }
-      .choice-btn {
-        display: block;
-        width: 100%;
-        margin: 0.5em 0;
-        padding: 1em;
-        font-size: 1em;
-      }
-      #final-highlight {
-        font-size: 1.5em;
-        margin: 1em 0;
-        font-weight: bold;
-        text-align: center;
-        background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
-        background-size: 400% 400%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: rainbow 2s ease infinite;
-      }
+      margin-bottom: 1em;
+      color: #00ffcc;
+    }
+    h5 {
+      font-size: 1.2em;
+      line-height: 1.2;
+      margin-top: 0em;
+      margin-bottom: 1em;
+      color: #b5fff0;
+    }
+    .intro {
+      text-align: left;
+      margin-bottom: 0em;
       
-      .risk-notice {
-        text-align: center;
-        font-size: 1.5em;
-        color: #e60039;
-        margin-bottom: 1em;
-        height: 1.5em; /* 保留空間，淡出後不影響版面跳動 */
-        transition: opacity 0.5s ease;
-        opacity: 0;
-      }
+      background: rgba(255,255,255,0.05);
+      padding: 0.5em;
+      border-radius: 10px;
+    }
+    
+    #question-title {
+      font-size: *2em;  /* 你可以依需求調整數值 */
+      font-weight: bold; /* 也可以設為 normal, lighter 等 */
+      margin-bottom: 0.5em;
+      color: #00ffcc;
+    }
+    #question-text {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+    #question-intro {
+      font-size: 1.15em;
+      line-height: 1.2;
+      margin-top: -1em;
+      margin-bottom: 0em;
+    }
+    #feedback-title {
+      font-size: 2em;  /* 你可以依需求調整數值 */
+      font-weight: bold; /* 也可以設為 normal, lighter 等 */
+      margin-bottom: 0.5em;
+      color: #00ffcc;
+    }
+    #feedback-text {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin-bottom: 1em;
+      text-align: justify;
+    }
+    #knowledge-title {
+      font-size: 2em;  /* 你可以依需求調整數值 */
+      font-weight: bold; /* 也可以設為 normal, lighter 等 */
+      margin-bottom: 0.5em;
+      color: #00ffcc;
+    }
+    #knowledge-text {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin-bottom: 1em;
+      text-align: justify;
+    }
+    #final-feedback {
+      font-size: 2em;
+      margin: 1em 0;
+      text-align: justify;
+      font-weight: bold;
+      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 2s ease infinite;
+    }
+    .final-score {
+      margin-top: 1em;
+      font-size: 1.8em;
+      color: #00ffcc;
+    }
+    .all-endings {
+      margin-top: 1.6em;
+      font-size: 1.2em;
+      color: #eee;
+      text-align: left;
+      padding: 1em;
+      background-color: rgba(255,255,255,0.05);
+      border-radius: 10px;
+    }
+    #result-screen .all-endings h3 {
+      margin-top: 0em;
+      /*font-size: 0.95em; /* 修改"所有評語對照表"標題的字體大小 */
+    }
 
-      #output {
-        font-size: 1.2em;
-        margin-top: 2em;
-        padding: 1em;
-        border: 1px solid #ccc;
-        background: #f9f9f9;
-        white-space: pre-line;
-        text-align: justify;
-      }
-      @keyframes rainbow {
-        0% { background-position: 100% 50%; }
-        50% { background-position: 0% 50%; }
-        100% { background-position: 100% 50%; }
-      }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div class="container">
-      <!-- 首頁 -->
-      <div id="start-screen">
-        <h1>翼裝飛行訓練日誌</h1>
-        <h4 class="center">踏上天空之路，書寫冒險篇章！</h4>
-        <div class="intro">
-          <h5>翼裝飛行是一項結合速度、技巧與風險的極限運動。立體劇場電影《翼裝飛行》的內容化為這款小遊戲，將你的旅程寫入一篇獨一無二的訓練日誌——</h5>
-          <h5>見證你的堅持與飛行夢想吧！</h5>
-          <h3>🔍 遊戲說明</h3>
-          <p>
-            🌌 <strong>背景故事</strong><br/>你將踏上和主角羅貝塔相似的飛行旅程，透過一連串的選擇體驗飛行訓練、挑戰極限。在這段訓練旅途中，你將學會判讀天氣、調整飛行姿態、選擇合適裝備等等，並理解背後的物理知識。
-          </p>
-          <p>
-            🧠 <strong>玩法簡介</strong><br />遊戲總共 5 種情境。每種情境只能選擇一個答案。
-          </p>
-          <p>
-            🏆 <strong>目標與結局</strong
-            ><br />遊戲結束後，將根據你的選擇獲得專屬的翼裝飛行訓練日誌。
-          </p>
-        </div>
-        <button onclick="startGame()">開始創建我的日誌</button>
-      </div>
+    #result-screen .all-endings ul li {
+      text-align: justify;
+      /*font-size: 0.5em; /* 修改評語列表的字體大小 */
+    }
+    
+    .score-display {
+      margin-top: 1em;
+      font-size: 1em;
+      color: #ffffff;
+    }
+    
+    .option-button {
+      display: block;
+      margin: 10px auto;
+      width: 80%;
+    }
+    .hidden {
+      display: none;
+    }
+    
+    #final-highlight {
+      font-size: 1.5em;
+      margin: 1em 0;
+      font-weight: bold;
+      text-align: center;
+      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 2s ease infinite;
+    }
+    h6 {
+      font-size: 1.3em;
+      margin: 1em 0;
+      text-align: justify;
+      color: #00ffcc;
+      text-align: center;
+    }
+    
+    @keyframes rainbow {
+      0% { background-position: 100% 50%; }
+      50% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <div id="start-screen">
+    <h1>極光任務：解碼天際之光</h1>
+    <h4>追尋極光起源，解開天際祕語！</h4>
+    <div class="intro">
+      <h5>夜空突然被一道光幕點亮，像是宇宙在傳遞某種訊息……宇宙劇場電影《極光》的內容化為這款小遊戲，跟著極光的線索，一步步解開其中的奧秘。</h5>
+      <h5>你，就是這場任務的觀測者與解碼者！</h5>
+      <h3>🔍 遊戲說明</h3>
+      <p>🌌 <strong>背景故事</strong><br>你是一位參與極光研究任務的觀測員。任務目標是透過一系列知識挑戰，解開極光的成因與變化，彙整宇宙間的光之紀錄，展開全方位的追光任務！
 
-      <!-- 問題頁面 -->
-      <div id="question-screen" class="hidden">
-        <h2 id="question-title"></h2>
-        <p style="text-align: center" id="question-text"></p>
-        <div id="question-options"></div>
-        <div id="risk-notice" class="risk-notice"></div>
-      </div>
-      <!-- 知識頁 -->
-      <div class="hidden" id="knowledge-screen">
-        <p id="knowledge-text"></p>
-        <div id="info-link" class="hidden" style="margin-top: 1em"></div>
-        <button onclick="nextQuestion()">繼續</button>
-      </div>
-      
-      <!-- 結尾頁 -->
-      <div id="final-message-screen" class="hidden">
-        <h6>冒險家找到了許多前人尚未嘗試的路線，<br>將我們帶到從未有人到過的地方，<br>完成從未有人做過的事情。</h6>
-        <h2 id="final-highlight">這就是夢想——<br>尋找終極路線，並在有生之年講述這個故事。</h2>
-        <div id="FMinfo-link" class="hidden" style="margin-top: 1em;"></div>
-        <button onclick="showOutput()">查看日誌</button>
-      </div>
-
-      <!-- 輸出頁面 -->
-      <div id="output-screen" class="hidden">
-        <h2>🌟 我的訓練日誌</h2>
-        <div id="output"></div>
-        <button onclick="location.reload()">重新開始</button>
-        <!-- <button onclick="downloadJournal()">下載日誌</button>-->
-      </div>
+</p>
+      <p>🧠 <strong>玩法簡介</strong><br>遊戲總共 6 關。每關只有一個正確答案，答對得 1 分，答錯 0 分。</p>
+      <p>🏆 <strong>目標與結局</strong><br>遊戲結束後，將根據你的總分給予不同的評語與稱號。你能成功破解所有謎團，成為極光解碼者嗎？</p>
     </div>
-
-    <script>
-      const state = {
-        step: 0,
-        answers: {},
-        fatal: false,
-        journalParts: [],
-        risk: 0,
-        riskRecord: [], // 存每題風險數值
-        hasFatalRisk: false, // 是否有 +10 題
-      }
-
-      const locations = {
-        A: "瑞士：愛格爾峰",
-        B: "美國：摩押沙漠",
-        C: "澳洲：希爾灣上空",
-      }
-
-      const weatherOptions = [
-        { key: "A", label: "晴朗" },
-        { key: "B", label: "氣壓變化大" },
-        { key: "C", label: "能見度低，有強風" },
-        { key: "D", label: "能見度零" },
-      ]
-
-      const questions = [
-        {
-          key: "location",
-          text: "選擇你的訓練地點：",
-          options: {
-            A: locations.A,
-            B: locations.B,
-            C: locations.C,
-          },
-          knowledge: {
-            A: "阿爾卑斯山脈的愛格爾峰又稱死亡之牆，天氣變化快速、難以預測，是死亡率極高的飛行場域，超過 60 位冒險家再也沒有回來。",
-            B: `摩押沙漠的峭壁雖然只有愛格爾峰的三分之一高，卻是練習低空翼裝飛行(從懸崖而非飛機上縱身躍下)的理想場域。
-            
-            然而，高溫使空氣密度變低，較難產生足夠的升力，也更容易產生亂流與對流。
-            
-            這些條件讓飛行更具挑戰性，也考驗飛行員的判斷與姿勢控制能力。`,
-            C: `希爾灣的海岸筆直延伸，沙灘平坦寬廣，是天然的飛行著陸跑道。
-            
-            在這裡從高空躍下，不僅能俯瞰壯麗海景，更能練習高空、長距離與高速滑翔飛行。
-            
-            相較於山區，這裡的氣流較穩定，是訓練姿勢調整與風阻控制的理想環境。`,
-          },
-        },
+    <button onclick="startGame()">開始遊戲</button>
+  </div>
+  <!-- 問題頁 -->
+  <div id="question-screen" class="hidden">
+    <h2 id="question-title"></h2>
+    <p style="text-align: justify;" id="question-text"></p>
+    <div id="options-container"></div>
+  </div>
+  <!-- 回饋頁 -->
+  <div class="hidden" id="feedback-screen">
+    <h3 id="feedback-title"></h3>
+    <p id="feedback-text"></p>
+    <div id="round-score" class="score-display hidden"></div>
+    <button onclick="showKnowledge()">查看解析</button>
+  </div>
+  <!-- 知識頁 -->
+  <div class="hidden" id="knowledge-screen">
+    <h3 id="knowledge-title">知識補充</h3>
+    <p id="knowledge-text"></p>
+    <button onclick="nextQuestion()">下一頁</button>
+  </div>
+  <!-- 結尾頁 -->
+  <div id="final-message-screen" class="hidden">
+    <h6>除了火星，我們還探索銀河中是否有與我們類似的星球。然而，浩瀚星辰中，我們發現自己仍然形單影隻。<br>但是透過璀璨奪目的極光，我們向宇宙展現了我們的存在。<br>你已完成所有任務，成功解碼極光背後的秘密。<br>宇宙仍有許多未知等待被發現——<br>任務結束，但探索永無止境。</h6>
+    <h2 id="final-highlight">未來的觀測者，將以你的紀錄為起點，<br>繼續追尋宇宙的光之軌跡。</h2>
+    <div id="info-link" class="hidden" style="margin-top: 1em;"></div>
+    <button onclick="showResult()">下一頁</button>
+  </div>
+  <!-- 結算頁 -->
+  <div class="hidden" id="result-screen">
+    <h2>🌟 任務結束！</h2>
+    <p id="final-feedback"></p>
+    <div class="final-score" id="final-score"></div>   
+    <div class="all-endings">
+      <h3>所有評語對照表：</h3>
+      <ul>
+        <li>0–1 分：極光的世界於你而言仍在雲霧之中，有待探索。</li>
+        <li>2–3 分：你已踏出關鍵一步，理解正逐漸清晰。</li>
+        <li>4–5 分：你能精準解析極光，幾乎掌握全貌，是位優秀極光分析員！</li>
+        <li>6 分：你成功解開極光所有謎題，是知識與觀測能力兼具的極光解碼者！</li>
+      </ul>
+    </div>
+    <button onclick="location.reload()">重新開始</button>
+  </div>
+</div>
+  <script>
+    const questions = [
+      {
+        title: "第 1 關：極光的成因",
+        question: "在極地的夜空裡，有時會出現跳動的光幕，像是天空在發光，這樣的景象讓人驚嘆不已，它是怎麼產生的呢？",
+        options: [
+          "月亮的反光照亮了天空",
+          "火山爆發噴出發光的氣體",
+          "太陽風中的粒子撞到地球大氣",
+          "雲層中的水氣折射出彩色光線"
+        ],
+        answerIndex: 2,
+        feedback: "極光是來自天空中粒子的碰撞所產生的光，它的顏色取決於碰撞的氣體種類。",
+        knowledge: `極光是一種發生在高空的自然現象，通常出現在地球靠近北極和南極的地區。
         
-        {
-          key: "flightplan",
-          text: "飛行前，你會怎麼做準備？",
-          options: {
-            A: "親自走地形，標出備用降落點",
-            B: "用地圖與風向圖模擬路線",
-            C: "根據經驗反覆模擬應變狀況"
-          },
-          knowledge: {
-            A: `每一次翼裝飛行背後，都是多週的規劃與準備。飛行者需親自踏查地形、確認潛在障礙與安全著陸點。
-            
-            許多路線需在高海拔地區長時間步行才能完成探查，風向、氣壓與地形交會點都可能是關鍵風險。
-            
-            預測、模擬、擬定備案，才能讓短短幾分鐘的飛行更加安全、完整。`,
-            B: `每一次翼裝飛行背後，都是多週的規劃與準備。飛行者需親自踏查地形、確認潛在障礙與安全著陸點。
-            
-            許多路線需在高海拔地區長時間步行才能完成探查，風向、氣壓與地形交會點都可能是關鍵風險。
-            
-            預測、模擬、擬定備案，才能讓短短幾分鐘的飛行更加安全、完整。`,
-            C: `每一次翼裝飛行背後，都是多週的規劃與準備。飛行者需親自踏查地形、確認潛在障礙與安全著陸點。
-            
-            許多路線需在高海拔地區長時間步行才能完成探查，風向、氣壓與地形交會點都可能是關鍵風險。
-            
-            預測、模擬、擬定備案，才能讓短短幾分鐘的飛行更加安全、完整。`
-          }
-        },
-
-        {
-          key: "weather",
-          question: "你要在這種天氣下進行飛行嗎？",
-          isWeather: true,
-        },
-        {
-          key: "training",
-          text: "今天你要專注的訓練目標是？",
-          options: {
-            A: "提升升力",
-            B: "編隊飛行",
-            C: "高空加速與減速",
-          },
-          knowledge: {
-            A: `調整飛行姿勢與傾斜角度可以最大化升力，進而提升滑翔距離。
-            
-            升力來自空氣在飛翼上下產生的壓力差，與飛行面積和姿勢有關。
-            
-            良好的姿態可達到約 3:1 的滑翔比，讓你每下降 1 公尺就能滑翔 3 公尺以上。`,
-            B: `編隊飛行需要飛行者之間高度的默契與距離控制。每位飛行者在空中飛行時，身後會產生一段不可見、混亂的氣流，稱為尾跡湍流。
-            
-            若不小心進入這些湍流區域，飛鼠裝可能會摺疊、失速，甚至墜落。安全的飛行位置通常是斜下方或側後方，避免正後方，才能有效避開尾跡。
-            
-            湍流除了來自前方飛行者，也可能因風與地形交互作用而形成。風速愈強、風向變化愈劇烈，湍流就愈難預測，因此隊形與飛行策略的選擇至關重要。`,
-            C: `高空跳傘初期速度迅速上升，在重力加速度作用下，僅 3 秒內時速就可達到 60 英里，8 秒後突破 100 英里。約 15 秒後，由於空氣阻力與重力達成平衡，速度穩定於終端速度。
-            
-            飛行者可透過調整身體傾斜角與手腳開展程度，控制空氣阻力，達到提速或減速的效果。近年記錄顯示，極端姿勢下的終端速度甚至可突破每小時 250 英里。
-            
-            當拉開降落傘時，時速將瞬間驟降至 10 英里，如同空中急煞車。這一過程考驗飛行者對時機與姿勢的準確掌握，是飛行訓練中最具風險與技術性的項目之一。`,
-          },
-        },
-        {
-          key: "gear",
-          text: "你選擇的飛鼠裝裝備是？",
-          options: {
-            A: "傳統尼龍飛鼠裝",
-            B: "碳纖維氣室裝"           
-          },
-          knowledge: {
-            A: `傳統飛鼠裝最早只是將尼龍布料縫在膝蓋與手臂之間，構造簡單、輕巧，主要用於滑翔技巧的初步訓練。
-            
-            它沒有內建氣室或結構強化，所有升力與穩定性都仰賴飛行者自身的姿勢控制與張力維持。
-            
-            雖然阻力較大、滑翔距離有限，但能有效幫助飛行者理解升力原理、熟悉空中姿勢，是累積經驗的理想起點。`,
-            B: `新型飛鼠裝結合氣室結構與碳纖維內襯，能在跳躍後迅速充氣膨脹，像滑翔翼一樣形成剛性結構。這使飛鼠裝更快產生升力，縮短垂直下墜段，提早進入滑翔狀態。
-            
-            進氣口是關鍵設計，它導入氣流讓整件裝備充氣撐開，使裝備穩定如機翼，並提升整體抗風能力。
-            
-            氣室裝備與碳纖維的結合讓飛行更穩定、更有效率，也讓飛行者能挑戰過去難以抵達的區域，是現今最主流的翼裝類型。`            
-          },
-        },
-      ];
-
-      function formatknowledge(knowledge) {
-        return knowledge
-          .replace(/\n/g, "<br>") // 若你 intro 裡是用換行符號斷行，也可以加這行
-          .replace(/\s{2,}/g, ""); // 清除多餘空白
+        當太陽拋出高速的帶電粒子（也就是太陽風），這些粒子會飛向地球。地球有一層看不見的磁場保護我們，這些粒子會沿著磁力線被引導到南北極的高空，並與大氣中的氣體分子發生碰撞。
+        
+        當它們碰撞時，就會發出各種顏色的光，這就是我們看到的極光。綠光是最常見的顏色，紅光和藍光也可能出現，這取決於粒子的能量和碰撞的氣體種類與高度，具體如下：
+        · 紅：高層（> 200 公里）氧原子
+				· 綠：中層（約 100 公里）氧分子
+        · 藍／紫：氮分子
+        · 粉紅：多種顏色光混合所致
+        
+所以極光看起來就像是夜空中閃耀的光之舞，是太陽和地球一起合作產生的奇景！`
+        
+      },
+      {
+        title: "第 2 關：地球磁場的角色",
+        question: "極光只出現在特定區域的天空，這和地球本身的什麼特性有關呢？",
+        options: [
+          "地球有海洋能反射光",
+          "地球磁場的保護作用",
+          "地球內部有火山活動",
+          "月亮的位置會改變地球能量"
+        ],
+        answerIndex: 1,
+        feedback: "地球的磁場不只是保護傘，它還會引導極光出現在極地！",
+        knowledge: `地球內部有一個流動的熔融金屬核心，這讓地球產生一個像「看不見的磁鐵」一樣的磁場。這個磁場會擋住大部分從太陽而來的高能粒子，保護地表的生命不被傷害。
+        
+        不過，有些帶電粒子會沿著地球磁場的磁力線，往磁極（南北極）移動。這些粒子進入極地高空時，會和大氣分子碰撞，產生極光。沒有磁場，就不會有極光，也不會有我們所熟悉的安全環境！`,
+      },
+      {
+        title: "第 3 關：合適的觀賞地點",
+        question: "有人說只要運氣好，在城市裡也能看到極光。但如果你真的想親眼目睹極光，應該去哪裡最有機會？",
+        options: [
+          "熱帶城市（如新加坡）",
+          "極地附近（如阿拉斯加）",
+          "高山森林（如喜馬拉雅山）",
+          "乾燥沙漠（如撒哈拉沙漠）"
+        ],
+        answerIndex: 1,
+        feedback: "想看到極光？你得靠近地球的兩極才行！冰島、阿拉斯加、黃刀鎮都是熱門地點喔！",
+        knowledge: `地球的磁場會引導太陽風的帶電粒子往南北極方向移動，因此極光通常出現在靠近磁極的天空。這些區域形成一個「極光帶」，又稱為「極光橢圓區」，環繞在地磁極周圍。這些地方越靠近極光帶中心，看到極光的機率就越高。最常見的觀賞地點包括：
+        
+        · 北美洲的阿拉斯加、加拿大的黃刀鎮和育空地區
+        · 北歐的冰島、挪威、芬蘭北部
+        · 南半球的南極周邊也能見到南極光，但交通不便
+        
+        在太陽活動非常劇烈時，極光可能延伸到較南的地區，但那是少見的例外。想看極光，記得往高緯度、遠離城市燈光的地方去，才是最佳選擇！`,
+      },
+      {
+        title: "第 4 關：太陽活動週期",
+        question: "你可能會發現，有些年份極光特別活躍，有些時候則安靜許多。這樣的變化，和太陽的什麼特性有關呢？",
+        options: [
+          "太陽照射角度",
+          "太陽表面的黑子變化",
+          "太陽與月亮的距離",
+          "太陽的表面溫度變冷"
+        ],
+        answerIndex: 1,
+        feedback: "太陽有自己的活動週期，當表面出現大量黑子時，極光就會變得特別強烈喔！",
+        knowledge: `太陽表面有時會出現一些黑色的斑點，這些稱為「太陽黑子」，它們代表太陽活動特別活躍的區域。經過長期觀察，科學家發現太陽的黑子數量大約每 11 年會有一個高峰，這就稱為太陽活動週期。
+        
+        這也是為什麼天文學家會預測「極光季節」──因為它和太陽黑子的活動息息相關。掌握太陽的脾氣，就能更好地預測極光的表現！`,
+      },
+      {
+        title: "第 5 關：爆發？！",
+        question: "有時候，極光會突然變得非常明亮，像瀑布一樣傾瀉而下，甚至照亮整片天空。這樣的極光爆發，最常是因為什麼引起的呢？",
+        options: [
+          "月亮反射更多陽光",
+          "地球天氣變得寒冷",
+          "太陽風帶來大量高能粒子",
+          "衛星傳來的電磁干擾"
+        ],
+        answerIndex: 2,
+        feedback: "當太陽風突然加強，更多粒子衝進地磁層，就會引發一場壯觀的極光爆發！",
+        knowledge: `有時候，極光不像平常那樣靜靜地在天邊跳舞，而是劇烈地閃動、快速擴展、甚至像瀑布般傾瀉而下，這種現象就叫做「極光爆發」或「極光亞爆」（auroral substorm）。
+        
+        這種爆發通常是因為太陽風中的高能粒子突然大量進入地球磁場，而這些粒子會短時間內在極區大氣中大量釋放能量，導致極光變得更大、更亮、更動態。
+        
+        NASA 的衛星觀測發現，極光爆發的背後常伴隨「磁場重連」的現象──也就是地球磁場的磁力線在外太空中斷裂、重新連接，釋放出大量能量。
+        
+        這不只是一場光秀，它也會影響地球上的通訊衛星、電力系統與導航設備，是一種美麗同時具有威力的宇宙現象！`,        
+      },
+      {
+        title: "第 6 關：宇宙極光",
+        question: "你知道嗎？極光並不只出現在地球。那麼，以下哪一個星球「目前」也有被觀測到極光現象？",
+        options: [
+          "金星",
+          "月球",
+          "火星",
+          "木星"
+        ],
+        answerIndex: 3,
+        feedback: "地球不是唯一擁有極光的星球！木星也有強大的磁場，能產生壯觀的極光喔！",
+        knowledge: `極光的出現，除了需要太陽風，還需要兩個重要條件：大氣和磁場。
+        
+        金星雖然有大氣，但沒有全球性的磁場，無法產生完整的極光結構。月球甚至幾乎沒有大氣，完全不具備產生極光的條件。
+        
+        火星雖然曾經有磁場與濃厚大氣，但它的內部早已冷卻，磁場也消失了，如今的大氣層很稀薄，只能偶爾觀測到微弱的紫外極光，不像地球那麼明顯。
+        
+        木星是一個巨大的氣態行星，擁有太陽系中最強的行星磁場，因此會產生壯觀的極光，尤其在極區非常明亮，甚至比地球的極光還強。
+        
+        所以，極光其實是宇宙中常見的現象，只要條件足夠，不只是地球，其他行星也能有自己的光之舞！`,
       }
+    ];
 
-      function startGame() {
-        document.getElementById("start-screen").classList.add("hidden");
-        state.step = 0;
-        state.answers = {};
-        state.fatal = false;
-        state.journalParts = [];
+    let currentQuestion = 0;
+    let score = 0;
+
+    function startGame() {
+      document.getElementById("start-screen").classList.add("hidden");
+      showQuestion();
+    }
+    function formatknowledge(knowledge) {
+  		return knowledge
+      .replace(/\n/g, '<br>') // 若你 intro 裡是用換行符號斷行，也可以加這行
+      .replace(/\s{2,}/g, ''); // 清除多餘空白
+  	}
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question-screen").classList.remove("hidden");
+      document.getElementById("question-title").textContent = q.title;
+      document.getElementById("question-text").textContent = q.question;
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.className = "option-button";
+        btn.onclick = () => checkAnswer(index);
+        	
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+
+    function checkAnswer(selectedIndex) {
+      document.getElementById("question-screen").classList.add("hidden");
+      const q = questions[currentQuestion];
+      document.getElementById("feedback-screen").classList.remove("hidden");
+      if (selectedIndex === q.answerIndex) {
+        document.getElementById("feedback-title").textContent = "答對了！";
+        score++;
+      } else {
+        document.getElementById("feedback-title").textContent = "答錯了...";
+      }
+      document.getElementById("round-score").innerHTML =
+        `目前總分：<strong>${score}</strong>`;
+      document.getElementById("round-score").classList.remove("hidden");
+      document.getElementById("feedback-text").textContent = q.feedback;
+    }
+
+    function showKnowledge() {
+      document.getElementById("feedback-screen").classList.add("hidden");
+      document.getElementById("knowledge-screen").classList.remove("hidden");
+      document.getElementById("knowledge-text").innerHTML = formatknowledge(questions[currentQuestion].knowledge);
+      const info = questions[currentQuestion];
+      const link = info && info.link;
+      const linkArea = document.getElementById("info-link");
+      if (link) {
+        linkArea.innerHTML = "<p>相關內容</p>";
+
+        // 情況 1：多個網址
+        if (Array.isArray(link)) {
+          link.forEach(l => {
+            linkArea.innerHTML += `<a href="${l.url}" target="_blank" style="display:block; color:#00ccff;">${l.text}</a>`;
+          });
+        }
+        // 情況 2：單一網址
+        else if (link.url && link.text) {
+          linkArea.innerHTML += `<a href="${link.url}" target="_blank" style="display:block; color:#00ccff;">${link.text}</a>`;
+        }
+
+        linkArea.classList.remove("hidden");
+      } else {
+        linkArea.innerHTML = "";
+        linkArea.classList.add("hidden");
+      }
+    }
+
+    function nextQuestion() {
+      document.getElementById("knowledge-screen").classList.add("hidden");
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
         showQuestion();
-      }
+      } else {
+    		showFM();
+      }      
+    }
+    
+    function showFM() {
+      document.getElementById("final-message-screen").classList.remove("hidden");
+      const linkArea = document.getElementById("info-link");
+      const link = [
+        { text: "展示場 1 樓：太陽風", url: "https://sites.google.com/view/tamwebtp/%E4%B8%80%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E5%A4%AA%E7%A9%BA%E6%8E%A2%E9%9A%AA/%E5%A4%AA%E9%99%BD%E9%A2%A8"},
+        { text: "展示場 1 樓：極光", url: "https://sites.google.com/view/tamwebtp/%E4%B8%80%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E5%A4%AA%E7%A9%BA%E6%8E%A2%E9%9A%AA/%E6%A5%B5%E5%85%89"},
+        { text: "展示場 2 樓：太陽表面活動", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E5%A4%AA%E9%99%BD%E8%A1%A8%E9%9D%A2%E6%B4%BB%E5%8B%95"}
+      ];
+      if (link) {
+        linkArea.innerHTML = "<p>相關內容</p>";
 
-      function showQuestion() {
-        const step = state.step;
-        const q = questions[step];        
-        document.getElementById("question-screen").classList.remove("hidden");
-        document.getElementById("question-title").textContent = q.text;
-        document.getElementById("question-text").textContent = q.question;
-
-        
-        const qOptBox = document.getElementById("question-options");
-        qOptBox.innerHTML = "";
-        if (q.isWeather) {
-          const randomWeather =
-                weatherOptions[Math.floor(Math.random() * weatherOptions.length)];
-          state.currentWeather = randomWeather;
-
-          document.getElementById("question-title").textContent = `今天的天氣是：${randomWeather.label}`;
-
-          const yesBtn = document.createElement("button");
-          yesBtn.textContent = "是的，開始飛行！";
-          yesBtn.className = "choice-btn";
-          yesBtn.onclick = () => {
-            state.answers[q.key] = randomWeather.key
-            if (randomWeather.key === "D") state.fatal = true
-            applyRiskValue(q.key, randomWeather.key);
-          };
-          qOptBox.appendChild(yesBtn);
-
-          const noBtn = document.createElement("button");
-          noBtn.textContent = "擇日再戰，換個天氣吧";
-          noBtn.className = "choice-btn";
-          noBtn.onclick = () => showQuestion();
-          qOptBox.appendChild(noBtn);
-          return;
+        if (Array.isArray(link)) {
+          link.forEach((l) => {
+            linkArea.innerHTML += `<a href="${l.url}" target="_blank" style="display:block; color:#00ccff;">${l.text}</a>`
+          });
         }
-
-        Object.entries(q.options).forEach(([key, label]) => {
-          const btn = document.createElement("button");
-          btn.textContent = label;
-          btn.className = "choice-btn";
-          btn.onclick = () => {
-            state.answers[q.key] = key;
-            
-            if (q.key === "location") {
-              // 第一題不處理風險，直接進知識頁
-              renderKnowledgePage(q, key);
-            } else {
-              applyRiskValue(q.key, key);
-            }
-          };
-          qOptBox.appendChild(btn);
-        });
+        linkArea.classList.remove("hidden");
       }
-      
-      function getRiskValue(qKey, selectedKey) {
-        if (qKey === "weather" && selectedKey === "D") return 10;
+    }
 
-        const roll = Math.random();
-        if (roll < 0.01) return 10;
-        if (roll < 0.11) return 2;
-        if (roll < 0.31) return 1;
-        return 0;
-      }
-
-      function applyRiskValue(qKey, selectedKey) {
-        const risk = getRiskValue(qKey, selectedKey);
-        state.risk += risk;
-        state.riskRecord.push(risk);
-        if (risk === 10 && !(state.riskRecord.every(v => v === 2))) {
-          state.hasFatalRisk = true;
-        }
-
-        // 顯示 "+X" 提示後依題目決定跳哪個函式
-        const afterRisk = () => {
-          if (qKey === "weather") {
-            nextQuestion();
-          } else {
-            renderKnowledgePage(questions[state.step], selectedKey);
-          }
-        };
-
-        showRiskNotice(risk, afterRisk);
-      }
-
-      function renderKnowledgePage(question, selectedKey) {
-        document.getElementById("question-screen").classList.add("hidden");
-        document.getElementById("knowledge-screen").classList.remove("hidden");
-
-        document.getElementById("knowledge-text").innerHTML = formatknowledge(question.knowledge[selectedKey]);
-
-        const step = state.step;
-        const info = questions[step];
-        const link = info && info.link;
-        const linkArea = document.getElementById("info-link");
-        if (link) {
-          linkArea.innerHTML = "<p>相關內容</p>";
-
-          // 情況 1：多個網址
-          if (Array.isArray(link)) {
-            link.forEach((l) => {
-              linkArea.innerHTML += `<a href="${l.url}" target="_blank" style="display:block; color:#00ccff;">${l.text}</a>`
-            });
-          }
-          // 情況 2：單一網址
-          else if (link.url && link.text) {
-            linkArea.innerHTML += `<a href="${link.url}" target="_blank" style="display:block; color:#00ccff;">${link.text}</a>`;
-          }
-
-          linkArea.classList.remove("hidden");
-        } else {
-          linkArea.innerHTML = "";
-          linkArea.classList.add("hidden");
-        }
-      }
-
-      function nextQuestion() {
-        document.getElementById("knowledge-screen").classList.add("hidden");
-        state.step++;
-        if (state.step < questions.length) {
-          showQuestion();
-        } else {
-          showFM();
-        }
-      }
-      
-      function showFM() {
-        document.getElementById("final-message-screen").classList.remove("hidden");
-        /*const linkArea = document.getElementById("FMinfo-link");
-      	const link = [
-          { text: "BBC News：讓人變身成「飛鼠」的翼裝飛行", url: "https://www.bbc.com/ukchina/trad/vert_fut/2016/11/161104_vert_fut_the-man-who-wants-to-jump-out-of-a-plane-in-a-wingsuit"},
-          { text: "國家地理雜誌：定點跳傘再傳死亡意外（上）", url: "https://www.natgeomedia.com/environment/article/content-3429.html"},
-          { text: "國家地理雜誌：定點跳傘再傳死亡意外（下）", url: "https://www.natgeomedia.com/explore/article/content-3330.html"}
-        ]        
-        if (link) {
-          linkArea.innerHTML = "<p>延伸內容</p>";
-
-          if (Array.isArray(link)) {
-            link.forEach((l) => {
-              linkArea.innerHTML += `<a href="${l.url}" target="_blank" style="display:block; color:#00ccff;">${l.text}</a>`
-            });
-          }
-          linkArea.classList.remove("hidden");
-        }*/
-      }
-
-      function showOutput() {
-      	document.getElementById("final-message-screen").classList.add("hidden");
-        document.getElementById("output-screen").classList.remove("hidden");
-
-        const outputEl = document.getElementById("output");
-        outputEl.innerText = "";
-        const lines = [];
-
-        const introLines = [
-          "今天是個重要的日子，我開始了翼裝飛行的訓練之旅。",
-          "站在起飛點，我知道這將是改變我的飛行人生的一天。",
-          "經過長時間準備，我終於踏上翼裝飛行的訓練征途。"
-        ];
-        lines.push(randomFrom(introLines));
-        
-        const locationSentences = {
-          A: {
-            0: [
-              "我來到壯麗的愛格爾峰，這裡被稱為死亡之牆，是無數冒險者夢想的挑戰地點。",
-              "阿爾卑斯山的愛格爾峰氣候變化極快，訓練時需格外警覺每一個風的訊號。",
-              "這裡有著翼裝飛行最高的風險與榮耀，也有超過 60 位冒險家未能生還。"
-            ],
-            1: [
-              "抵達愛格爾峰後，我注意到山腰有強風痕跡，訓練過程更加緊張。",
-              "高海拔與亂流交錯的地形讓我需要不斷調整飛行策略。",
-              "氣候變幻莫測，在這裡每一秒的飛行都需要高度集中。"
-            ],
-            2: [
-              "一場突如其來的冷鋒幾乎打亂了整個訓練計畫，我只能臨機應變。",
-              "在大雪壟罩的山谷中，我幾度迷失方向，所幸成功穩住姿態。",
-              "愛格爾峰今天展現了它最險惡的一面，訓練過程驚險萬分。"
-            ],
-            10: [
-              "我在愛格爾峰的飛行中遭遇暴風雪，視線全失，最後被迫終止整個訓練。"
-            ]
-          },
-          
-          B: {
-            0: [
-              "我選擇了摩押沙漠，在炙熱懸崖間進行懸崖起跳與貼地飛行訓練。",
-              "儘管這裡高度不如阿爾卑斯山，但峭壁地形與熱空氣帶來獨特挑戰。",
-              "高溫使升力難以掌握，每一次起跳都仰賴極高的判斷力與反應速度。"
-            ],
-            1: [
-              "今天的沙漠氣流不穩，我必須反覆調整飛行姿態維持平衡。",
-              "陽光造成地表過熱，強烈對流讓飛行軌跡變得難以預測。",
-              "飛行中突遇氣旋，我被迫提早脫離預定路線。"
-            ],
-            2: [
-              "突如其來的沙塵暴遮蔽了整片視野，我只能靠記憶與儀器定位。",
-              "在狂風與對流交錯的峽谷間飛行，每一次轉彎都驚心動魄。",
-              "摩押今天成了飛行者的考驗場，我幾乎無法控制裝備。"
-            ],
-            10: [
-              "我在摩押沙漠遭遇劇烈沙塵暴，被迫中止飛行並緊急脫離訓練場域。"
-            ]
-          },
-          
-          C: {
-            0: [
-              "我來到澳洲的希爾灣，從高空俯瞰筆直海岸與壯麗海景，令人震撼。",
-              "這裡的氣流穩定，是理想的高空滑翔與風阻控制訓練場。",
-              "寬廣的沙灘成為完美著陸場，也讓我更安心地練習高速長距離飛行。"
-            ],
-            1: [
-              "飛行途中海風忽強忽弱，我必須快速反應姿態調整。",
-              "幾次意外的風切讓我偏離原本的軌道。",
-              "高空中風向變化明顯，我必須重新評估降落點。"
-            ],
-            2: [
-              "希爾灣上空突起暴風，我一度無法穩定滑翔。",
-              "氣流亂竄導致我進入不穩定區域，幾乎無法回復姿勢。",
-              "原本平靜的海岸線今天風雲變色，我驚險完成飛行。"
-            ],
-            10: [
-              "在希爾灣訓練時，突如其來的暴風捲走了我預定的飛行控制，訓練被迫中斷。"
-            ]
-          }
-        };
-        const locationKey = state.answers.location;
-        const locationRisk = state.riskRecord[0]; // 地點是第一題
-        const sentenceSet = locationSentences[locationKey][locationRisk];
-        lines.push(randomFrom(sentenceSet));
-        
-        if (state.answers.flightplan === "A") {
-          lines.push(randomFrom([
-            "我花了好幾天親自踏查飛行地形，標出每一個可能的備用降落點。",
-            "在高海拔的地區反覆行走，讓我更了解地貌與風勢對飛行的潛在影響。",
-            "事前走過所有路線，讓我在飛行時更能專注於技巧，而非擔憂未知。"
-          ]));
-        }
-        if (state.answers.flightplan === "B") {
-          lines.push(randomFrom([
-            "我仔細比對天氣預報、風向圖與地形圖，模擬了多條飛行路線。",
-            "結合數據與預測工具，我規劃出一條避開強風與亂流的安全航線。",
-            "透過模擬工具，我能預判可能出現的風場變化與障礙物分布。"
-          ]));
-        }
-        if (state.answers.flightplan === "C") {
-          lines.push(randomFrom([
-            "我根據過往經驗制定多套應變策略，確保每個突發狀況都能應對。",
-            "這次的計畫包含了三種備用飛行方案，讓我在空中更從容不迫。",
-            "我用腦中模擬飛行多次，每一個轉折點都預先安排了應變選項。"
-          ]));
-        }
-
-
-        
-
-
-
-        if (state.answers.weather === "D") {
-          const fatalEndings = {
-            A: "不幸的是，我在能見度為零的情況下起飛，最終迷失在茫茫的大雪與風暴之中……這次任務，以沉默告終。",
-            B: "不幸的是，我在能見度為零的情況下起飛，最終迷失在滾滾黃沙與沙塵暴之中……這次任務，以沉默告終。",
-            C: "不幸的是，我在能見度為零的情況下起飛，最終迷失在猛烈暴風雨的席捲之中……這次任務，以沉默告終。"
-          };
-          lines.push(fatalEndings[state.answers.location]);
-        } else {
-          const weatherLabel = {
-            A: [
-              "天氣晴朗，氣流穩定，讓我更專注於技術的提升。",
-              "陽光普照，地形清晰可見，是理想的飛行訓練日。",
-              "穩定的天氣讓我得以專注於每一個飛行細節的優化。"
-            ],
-            B: [
-              "氣壓變化頻繁，我必須時刻調整姿態來應對風勢。",
-              "不穩定的天氣迫使我更靈活地修正飛行軌跡。",
-              "今天的氣流複雜，是觀察與實作姿勢控制的好時機。"
-            ],
-            C: [
-              "強風與低能見度增添訓練難度，也磨練了我的應變能力。",
-              "在風勢變化劇烈的情況下，我更專注於每一個細節的控制。",
-              "惡劣天氣下的飛行是一場意志與技巧的雙重考驗。"
-            ]
-          };
-          lines.push(randomFrom(weatherLabel[state.answers.weather]));
-
-          if (state.answers.training === "A")
-            lines.push(
-              randomFrom([
-                "我專注於提升升力的訓練，透過角度與姿勢的調整來增加滑翔距離。",
-                "我反覆練習身體傾斜與展翼姿勢，試圖延長飛行時間。",
-                "升力訓練讓我更加理解空氣流動與身體角度之間的微妙關係。"
-              ])
-            );
-          if (state.answers.training === "B")
-            lines.push(
-              randomFrom([
-                "我進行了編隊飛行訓練，與夥伴保持良好距離，避免湍流干擾。",
-                "透過觀察夥伴的動作，我學會了即時微調自己的飛行姿態。",
-                "編隊飛行不僅需要技術，也需要絕對的專注與默契。"
-              ])
-            );
-          if (state.answers.training === "C")
-            lines.push(
-              randomFrom([
-                "我模擬了高空加速與減速的場景，學習控制姿態與速度變化。",
-                "這次的飛行重點是終端速度的掌握與空氣阻力的利用。",
-                "透過調整肢體張力與俯仰角，我更熟悉如何在高速中保持穩定。"
-              ])
-            );
-
-          if (state.answers.gear === "A")
-            lines.push(
-              randomFrom([
-                "我使用的是傳統尼龍飛鼠裝，儘管簡單，卻能幫助我強化基本飛行技巧。",
-                "這套裝備要求極高的身體控制力，是磨練基礎的最佳選擇。",
-                "尼龍飛鼠裝讓我重新體會風的流動與身體的配合。"
-              ])
-            );
-          if (state.answers.gear === "B")
-            lines.push(
-              randomFrom([
-                "我穿上碳纖維氣室飛鼠裝，起跳後迅速充氣展翼，讓我更早進入穩定滑翔狀態。",
-                "這套裝備提供極高剛性與升力，使我在高速飛行中保持穩定，即使遇上亂流也能從容應對。",
-                "氣室設計與碳纖維內襯的結合讓飛行更精準、更高效，是挑戰複雜飛行路線的最佳選擇。"
-              ])
-            );          
-
-          if (!state.hasFatalRisk) {
-            let endingSet = [];
-
-            if (state.risk <= 2) {
-              endingSet = [
-                "訓練雖然艱難，但我從中學到了寶貴的飛行知識與經驗。這一切都將成為我通往高空夢想的基石。",
-                "這段飛行旅程教會我尊重風的力量，也讓我更理解自己在空中的每一個選擇。",
-                "每一次飛行都是與自然對話的機會，而今天的訓練，讓我更加堅定了追夢的決心。"
-              ];
-            } else if (state.risk <= 4) {
-              endingSet = [
-                "儘管過程中出現了些小狀況，但我成功完成了訓練，也獲得了珍貴的經驗。",
-                "幾次驚險與挑戰讓我更成熟，也更加敬畏這片天空。",
-                "訓練過程比預期更曲折，但我挺了過來，也更懂得風險管理的重要性。"
-              ];
-            } else if (state.risk <= 7) {
-              endingSet = [
-                "這次飛行充滿困難與險象，但我撐過來了。",
-                "我一度失去控制，但靠著訓練與經驗，最終仍平安著陸。",
-                "這次訓練讓我真正體會到，極限與生還之間的距離有多近。"
-              ];
-            } else {
-              // fallback（應該不會進入這邊）
-              endingSet = ["這趟飛行失敗了，但也讓我看清了自己最需要學會的，是謙遜與準備。"];
-            }
-
-            lines.push(randomFrom(endingSet));
-          }
-        }
-        // 打字機效果
-        let index = 0
-        function typeLine() {
-          if (index < lines.length) {
-            outputEl.innerText += lines[index] + "\n"
-            index++
-            setTimeout(typeLine, 1000)
-          };
-          if (state.hasFatalRisk) {
-            // 中斷日誌輸出，提早結束
-            //outputEl.innerText += "\n在這次訓練中，一場重大失誤終結了我的飛行計畫……";
-            return;
-          };
-          
-        }
-        
-        typeLine();
-        
-        
-      }
-      
-      function randomFrom(array) {
-        return array[Math.floor(Math.random() * array.length)];
-      }
-      
-      function showRiskNotice(value, callback) {
-        const box = document.getElementById("risk-notice");
-        box.textContent = `⚠️風險值 +${value}`;
-        box.style.opacity = "1";
-
-        setTimeout(() => {
-          box.style.opacity = "0"; // 淡出
-        }, 1000);
-
-        setTimeout(() => {
-          box.textContent = ""; // 清空文字
-          callback();
-        }, 1500);
-      }
-
-      /*async function downloadJournal() {
-        const { jsPDF } = window.jspdf;
-
-        const journalElement = document.getElementById("output");
-
-        // 將文字畫面轉成圖片
-        const canvas = await html2canvas(journalElement, {
-          scale: 2
-        });
-        const imgData = canvas.toDataURL("image/png");
-
-        const pdf = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: "a4"
-        });
-
-        // 計算圖片大小（寬度 180mm，等比例縮放）
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = 180;
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-        pdf.addImage(imgData, "PNG", 15, 20, pdfWidth, pdfHeight);
-        pdf.save("翼裝飛行訓練日誌.pdf");
-      }*/
-
-    </script>
-  </body>
+    function showResult() {
+    document.getElementById("final-message-screen").classList.add("hidden");
+      document.getElementById("result-screen").classList.remove("hidden");
+      document.getElementById("final-score").textContent = `你的總分：${score}/6`;
+      let feedback = "";
+      if (score === 6) feedback = "你成功解開極光所有謎題，是知識與觀測能力兼具的極光解碼者！";
+      else if (score >= 4) feedback = "你能精準解析極光，幾乎掌握全貌，是位優秀極光分析員！";
+      else if (score >= 2) feedback = "你已踏出關鍵一步，理解正逐漸清晰。";
+      else feedback = "極光的世界於你而言仍在雲霧之中，有待探索。";
+      document.getElementById("final-feedback").textContent = feedback;
+    }
+  </script>
+</body>
 </html>
